@@ -1,9 +1,9 @@
-/*
-* @Author: O_c
-* @Date:   2019-11-01 10:55:27
-* @Last Modified by:   O_c
-* @Last Modified time: 2019-11-01 10:56:23
-*/
+/**
+  * @Author: O_c
+  * @Date:   2019-11-01 10:55:27
+  * @Last Modified by:   O_c
+  * @Last Modified time: 2019-11-01 11:13:41
+  */
 export default class Router {
   constructor({ routes }) {
     /** 创建实例属性: routes */
