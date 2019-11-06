@@ -2,8 +2,9 @@
   * @Author: O_c
   * @Date:   2019-11-01 16:54:36
   * @Last Modified by:   O_c
-  * @Last Modified time: 2019-11-04 10:50:32
+  * @Last Modified time: 2019-11-06 11:05:00
   */
+
 export default class Request {
   constructor (header) {
     /** 设置统一的请求头部 */
