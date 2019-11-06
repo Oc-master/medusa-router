@@ -2,13 +2,15 @@
   * @Author: O_c
   * @Date:   2019-11-01 15:13:43
   * @Last Modified by:   O_c
-  * @Last Modified time: 2019-11-06 11:12:18
+  * @Last Modified time: 2019-11-06 13:47:41
   */
+
+import Router from '../router'
 
 function page(ops = {}) {
   const originOnLoad = ops.onLoad || function() {}
 
-  const onLoad = (options) => {
+  const onLoad = function(options) {
     const { query } = options
     const formatQuery = query ? JSON.parse(decodeURIComponent(query)) : {}
 
@@ -16,17 +18,12 @@ function page(ops = {}) {
   }
 
   const configuration = {
+    $app: getApp(),
+    $router: new Router({ routes: routes }),
     onLoad
   }
 
   const options = Object.assign(ops, configuration)
-
-  // ops.onLoad = function(options) {
-  //   const { query } = options
-  //   const formatQuery = query ? JSON.parse(decodeURIComponent(query)) : {}
-
-  //   originOnLoad && originOnLoad.call(this, { ...options, query: formatQuery })
-  // }
 
   Page(options)
 }
