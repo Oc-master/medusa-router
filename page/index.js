@@ -1,31 +1,16 @@
-/**
-  * @Author: O_c
-  * @Date:   2019-11-01 15:13:43
-  * @Last Modified by:   O_c
-  * @Last Modified time: 2019-11-06 13:47:41
-  */
+import setWatcher from '../utils/watch';
 
-import Router from '../router'
+function page(options) {
+  const originOnLoad = options.onLoad || function() {};
 
-function page(ops = {}) {
-  const originOnLoad = ops.onLoad || function() {}
+  const onLoad = function(ops) {
+    const { query } = ops;
+    const formatQuery = query ? JSON.parse(decodeURIComponent(query)) : {};
+    options.watch && setWatcher.call(this, this.data, this.watch);
+    originOnLoad && originOnLoad.call(this, { ...ops, query: formatQuery });
+  };
 
-  const onLoad = function(options) {
-    const { query } = options
-    const formatQuery = query ? JSON.parse(decodeURIComponent(query)) : {}
+  Page({ ...options, onLoad });
+};
 
-    originOnLoad && originOnLoad.call(this, { ...options, query: formatQuery })
-  }
-
-  const configuration = {
-    $app: getApp(),
-    $router: new Router({ routes: routes }),
-    onLoad
-  }
-
-  const options = Object.assign(ops, configuration)
-
-  Page(options)
-}
-
-export default page
+export default page;
