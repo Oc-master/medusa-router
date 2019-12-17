@@ -12,7 +12,7 @@ function setWatcher(data, watch) {
 };
 
 function observe(data, key, watchFun) {
-  const value = data[key];
+  let value = data[key];
   Object.defineProperty(data, key, {
     configurable: true,
     enumerable: true,
@@ -21,6 +21,7 @@ function observe(data, key, watchFun) {
     },
     set: function(newValue) {
       watchFun(newValue, value);
+      value = newValue;
     },
   });
 };
