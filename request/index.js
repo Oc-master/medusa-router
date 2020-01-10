@@ -1,4 +1,10 @@
-export const request = ({ url, method, data = {}, header = {} }) => {
+export const request = ({ url, method, data = {}, header = {}, loadingOps = { isShow: true }, toastOps = {} }) => {
+  if ('isShow' in loadingOps && loadingOps.isShow) {
+    wx.showLoading({
+      mask: true,
+      title: loadingOps.text || '正在加载中...',
+    });
+  }
   return new Promise((resolve, reject) => {
     wx.request({
       url,
@@ -6,6 +12,7 @@ export const request = ({ url, method, data = {}, header = {} }) => {
       data,
       header,
       success: ({ statusCode, data: resData }) => {
+        console.log('request', statusCode, resData);
         if (statusCode === 200) {
           resolve(resData);
         } else {
@@ -14,6 +21,11 @@ export const request = ({ url, method, data = {}, header = {} }) => {
       },
       fail: (err) => {
         reject(err);
+      },
+      complete: () => {
+        if ('isShow' in loadingOps && loadingOps.isShow) {
+          wx.hideLoading();
+        }
       },
     });
   });
