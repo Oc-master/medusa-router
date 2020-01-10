@@ -1,8 +1,13 @@
-export const request = ({ url, method, data = {}, header = {}, loadingOps = { isShow: true }, toastOps = {} }) => {
-  if ('isShow' in loadingOps && loadingOps.isShow) {
+export const request = ({ url, method, data = {}, header = {}, loadingOps = {}, toastOps = {} }) => {
+  const defaultLoadingOps = {
+    isShow: true,
+    text: '正在加载中...',
+  };
+  const curLoadingOps = Object.assign(defaultLoadingOps, loadingOps);
+  if (curLoadingOps.isShow) {
     wx.showLoading({
       mask: true,
-      title: loadingOps.text || '正在加载中...',
+      title: curLoadingOps.text,
     });
   }
   return new Promise((resolve, reject) => {
@@ -23,7 +28,7 @@ export const request = ({ url, method, data = {}, header = {}, loadingOps = { is
         reject(err);
       },
       complete: () => {
-        if ('isShow' in loadingOps && loadingOps.isShow) {
+        if (curLoadingOps.isShow) {
           wx.hideLoading();
         }
       },
