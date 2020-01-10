@@ -17,7 +17,6 @@ export const request = ({ url, method, data = {}, header = {}, loadingOps = {}, 
       data,
       header,
       success: ({ statusCode, data: resData }) => {
-        console.log('request', statusCode, resData);
         if (statusCode === 200) {
           resolve(resData);
         } else {
@@ -36,22 +35,24 @@ export const request = ({ url, method, data = {}, header = {}, loadingOps = {}, 
   });
 };
 
-export const getRequest = ({ url, data, header }) => {
+export const getRequest = ({ url, data, header, loadingOps }) => {
   const options = {
     url,
     method: 'GET',
     data,
     header,
+    loadingOps,
   };
   return request(options);
 }
 
-export const postRequest = ({ url, data, header }) => {
+export const postRequest = ({ url, data, header, loadingOps }) => {
   const options = {
     url,
     method: 'POST',
     data,
     header,
+    loadingOps,
   };
   return request(options);
 }
