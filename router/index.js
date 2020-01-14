@@ -1,81 +1,98 @@
-/*
-* @Author: O_c
-* @Date:   2019-11-01 10:55:27
-* @Last Modified by:   O_c
-* @Last Modified time: 2019-11-01 10:56:23
-*/
-export default class Router {
-  constructor({ routes }) {
-    /** 创建实例属性: routes */
-    this.routes = routes
-  }
+const _EType = {
+  push: 'navigateTo',
+  replace: 'redirectTo',
+  reLaunch: 'reLaunch',
+  switchTab: 'switchTab',
+};
 
-  /**
-   * 通过toType决定路由跳转函数
-   * @param {String} url 路由跳转所需目标地址
-   * @param {String} toType 路由跳转方式
-   */
-  jump({ url, toType = 'push' }) {
-    const toTypeDict = {
-      push: 'navigateTo',
-      replace: 'redirectTo',
-      reLaunch: 'reLaunch',
-      switchTab: 'switchTab'
+/**
+ * 检查路由目标页面的key是否真实存在
+ * @param {String} key 路由映射关系中的key
+ */
+const _checkPathExists = (key) => {
+  if (!key) {
+    throw new Error('"target" is the required parameter.');
+  }
+  const isExists = Object.keys($mcRoutes).includes(key);
+  if (!isExists) {
+    throw new Error('The page for this keyword was not found.');
+  }
+};
+
+/**
+ * 路由跳转方法
+ * @param {String} target 目标页面路由路径对应的key
+ * @param {Object} query 路由参数
+ * @param {String} toType 路由跳转方式
+ */
+const _jump = (options) => {
+  const opsType = Object.prototype.toString(options);
+  if (opsType === '[object String]') {
+    _checkPathExists(options);
+    wx[_EType.push]({ url: `/${$mcRoutes[options]}` });
+  } else if (opsType === '[object Object]') {
+    const { target, query = {}, toType = 'push' } = options;
+    _checkPathExists(target);
+    if (toType === 'switchTab') {
+      wx[_EType.switchTab]({ url: `/${$mcRoutes[target]}` });
+      return;
     }
-    wx[toTypeDict[toType]]({ url })
+    const formatQuery = encodeURIComponent(JSON.stringify(query));
+    const url = `/${$mcRoutes[target]}?query=${formatQuery}`;
+    wx[_EType[toType]]({ url });
+  } else {
+    throw new Error('Parameter is wrong.');
   }
+};
 
-  /**
-   * 路由封装函数
-   * @param {String | Object} options 路由跳转所需参数 string: 路由对应key值 object: { target, query, toType }
-   */
-  to(options) {
-    const opsType = Object.prototype.toString.call(options)
-    if (opsType === '[object String]') {
-      /** 调用默认跳转方式的路由方法 */
-      const url = `/${this.routes[options]}`
-      this.jump({ url })
-    } else if (opsType === '[object Object]') {
-      const { target = 'index', query = {}, toType } = options
-      /** 拼接路由跳转地址和路由参数 */
-      const path = `/${this.routes[target]}`
-      const formatQuery = encodeURIComponent(JSON.stringify(query))
-      const url = `${path}?query=${formatQuery}`
-      this.jump({ url, toType })
-    } else {
-      console.log('调用路由方法失败，参数异常！')
-    }
-  }
+const to = (options) => {
+  _jump(options);
+};
 
-  /**
-   * navigateTo方式跳转的快捷调用函数
-   * @param {String | Object} options
-   */
-  push(options) {
-    this.to(options)
-  }
+const push = (options) => {
+  _jump(options);
+};
 
-  /**
-   * redirectTo方式的快捷调用函数
-   * @param {String | Object} options
-   */
-  replace(options) {
-    const opsType = Object.prototype.toString.call(options)
-    if (opsType === '[object String]') {
-      this.to({ target: options, toType: 'replace' })
-    } else if (opsType === '[object Object]') {
-      const { target, query } = options
-      this.to({ target, query, toType: 'replace' })
-    } else {
-      console.log('调用路由方法失败，参数异常！')
-    }
+const replace = (options) => {
+  if (typeof options === 'string') {
+    _jump({ target: options, toType: 'replace' });
+  } else {
+    _jump(options);
   }
+};
 
-  /**
-   * 路由出栈函数
-   * @param {Number} step 路由出栈层级
-   */
-  back(step = 1) {
-    wx.navigateBack({ delta: step })
+/**
+ * 页面回退方法
+ * @param {Number} step 回退步值
+ */
+const back = (step = 1) => {
+  wx.navigateBack({ delta: step });
+};
+
+/**
+ * 回到首页方法
+ */
+const goHome = () => {
+  wx.navigateBack({ delta: 100 });
+};
+
+/**
+ * 获取页面路由参数方法
+ */
+const getQuery = () => {
+  const page = getCurrentPages().pop();
+  if ('query' in page.options) {
+    const { query } = page.options;
+    return JSON.parse(decodeURIComponent(query));
   }
-}
+  return {};
+};
+
+module.exports = {
+  to,
+  push,
+  replace,
+  back,
+  goHome,
+  getQuery,
+};
