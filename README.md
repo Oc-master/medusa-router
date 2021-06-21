@@ -19,7 +19,7 @@ $ npm install @medusa/medusa-router
 import Router from './utils/router';
 
 App({
-	ms: new Router(wx),
+  ms: new Router(wx),
 });
 ```
 ```javascript
