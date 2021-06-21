@@ -1,7 +1,37 @@
 {
   "name": "medusa-router",
   "version": "1.0.0",
+  "description": "小程序路由功能",
   "main": "index.js",
+  "scripts": {
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oc-master/medusa-router.git"
+  },
+  "keywords": [
+    "miniprogram",
+    "wx",
+    "my",
+    "swan",
+    "Taro",
+    "uni-app",
+    "router"
+  ],
+  "author": "O_c",
   "license": "MIT",
-  "keywords": ["wx", "medusa"]
+  "bugs": {
+    "url": "https://github.com/Oc-master/medusa-router/issues"
+  },
+  "homepage": "https://github.com/Oc-master/medusa-router#readme",
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
