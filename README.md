@@ -32,8 +32,8 @@ const app = getApp();
 
 Page({
    onLoad() {
-      const { path, query } = app.ms.$route;
-      console.log(path, query); // '/pages/index/index' { id: 1 }
+      const { fullPath, query } = app.ms.$route;
+      console.log(fullPath, query); // '/pages/index/index' { id: 1 }
    },
    onClick() {
       app.ms.push({
