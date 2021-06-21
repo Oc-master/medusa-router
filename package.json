@@ -1,5 +1,5 @@
 {
-  "name": "medusa-router",
+  "name": "@medusa/medusa-router",
   "version": "1.0.0",
   "description": "小程序路由功能",
   "main": "index.js",
