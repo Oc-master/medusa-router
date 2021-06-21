@@ -145,7 +145,7 @@ class Router {
         const encodeQuery = this._encoding({ ...route.query, ...query });
         const options = {
           ...params,
-          url: `${route.path}?_query_=${encodeQuery}`,
+          url: `${route.url}?_query_=${encodeQuery}`,
         };
         delete options.query;
         return options;
