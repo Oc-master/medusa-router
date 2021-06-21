@@ -1,6 +1,6 @@
 {
   "name": "medusa-router",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "小程序路由功能",
   "main": "dist/router.js",
   "scripts": {
