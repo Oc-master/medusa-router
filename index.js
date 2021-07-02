@@ -31,19 +31,31 @@ class Router {
     const { route, options = {} } = page;
     const decodeQuery = this.decoding(options);
     const query = { ...options, ...decodeQuery };
-    delete query._query_;
-    return {
-      ...page,
-      query,
-      fullPath: `/${route}`,
+    Reflect.deleteProperty(query, '_query_');
+    return { ...page, query, fullPath: `/${route}` };
+  }
+
+  getPage(delta = 0) {
+    const type = typeof delta;
+    if (type !== 'string' && type !== 'number') {
+      throw new Error('The parameter is invalid');
+    }
+    const fn = getCurrentPages || Router.__platform__.getCurrentPages;
+    if (fn) {
+      const pages = fn();
+      const { length } = pages;
+      if (length > delta) return pages[length - 1 - (+delta)];
+      return null;
+    } else {
+      throw new Error('The "getCurrentPages" is not supported on the current platform');
     }
   }
 
-  getPage() {
-    if (getCurrentPages) {
-      const pages = getCurrentPages();
-      const page = pages.pop();
-      return page;
+  getPages() {
+    const fn = getCurrentPages || Router.__platform__.getCurrentPages;
+    if (fn) {
+      const pages = fn();
+      return pages;
     } else {
       throw new Error('The "getCurrentPages" is not supported on the current platform');
     }
@@ -121,10 +133,7 @@ class Router {
     if (!queryStr) return {};
     const query = queryStr.split('&').reduce((acc, item) => {
       const [key, value] = item.split('=');
-      return {
-        ...acc,
-        [key]: value,
-      };
+      return { ...acc, [key]: value };
     }, {});
     return query;
   }
@@ -147,7 +156,7 @@ class Router {
           ...params,
           url: `${route.url}?_query_=${encodeQuery}`,
         };
-        delete options.query;
+        Reflect.deleteProperty(options, 'query');
         return options;
       }
       return params;
