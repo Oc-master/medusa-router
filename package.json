@@ -1,6 +1,6 @@
 {
   "name": "medusa-router",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "小程序路由功能",
   "main": "dist/router.js",
   "scripts": {
@@ -29,7 +29,7 @@
   "homepage": "https://github.com/Oc-master/medusa-router#readme",
   "devDependencies": {
     "@babel/core": "^7.14.6",
-    "cz-conventional-changelog": "^3.2.0",
+    "cz-conventional-changelog": "^3.3.0",
     "rollup": "^2.52.2",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
