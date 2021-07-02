@@ -1,16 +1,28 @@
 <a name="zFQNE"></a>
 ## 简介
-`medusa-router` 对官方接口进行了封装增强，让你能以更加优雅的方式读取和使用路由。它相较于官方接口 **更加容易记忆** 并且 **路由参数能够保持原有的数据类型**。 `medusa-router` 被设计为可以在各类小程序当中使用的 SDK，目前已经在微信、百度、支付宝、Taro、uni-app 框架上测试通过。
+`medusa-router` 对官方接口进行了封装增强，让你能以更加优雅的方式读取和使用路由。它相较于官方接口 **更加容易记忆并使用** 并且 **路由参数能够保持原有的数据类型**。 `medusa-router` 是为了给各类小程序开发赋能而设计的，目前已经在微信、百度、支付宝、Taro、uni-app 框架上测试通过。
 <a name="g31HU"></a>
 ## 快速上手
 <a name="pFN0F"></a>
 ### 安装
-在支持 npm 包管理工具的项目中，你可以通过以下命令下载 `medusa-router` 。如果你的项目不支持的话，请访问 [medusa-router](https://github.com/Oc-master/medusa-router) 将 dist 文件夹中的文件拷贝到你的项目中。
+在支持 npm 包管理工具的项目中，你可以通过以下命令下载 `medusa-router` 。如果你的项目不支持的话，请访问 [medusa-router](https://github.com/Oc-master/medusa-router) 将 dist 文件夹中的文件拷贝到你的项目中。
 ```shell
-$ npm install @medusa/medusa-router
+$ npm install medusa-router
 ```
 <a name="tp8sF"></a>
 ### 使用
+首先我们需要将对应平台的标志对象传递给 `medusa-router` 并初始化实例：
+```javascript
+/** 微信原生框架 */
+import Router from './utils/router';
+
+const router = new Router(wx);
+/** Taro 框架 */
+import Taro from '@tarojs/taro';
+import Router from 'medusa-router';
+
+const router = new Router(Taro);
+```
 `medusa-router` 被设计为单例模式，假设你在多个文件中做初始化操作时也不需要担心创建多个实例。为了方便使用我们可以将实例化对象赋值到 app 实例的属性上。
 ```javascript
 /**
@@ -19,7 +31,7 @@ $ npm install @medusa/medusa-router
 import Router from './utils/router';
 
 App({
-  ms: new Router(wx),
+	ms: new Router(wx),
 });
 ```
 ```javascript
@@ -31,22 +43,22 @@ App({
 const app = getApp();
 
 Page({
-   onLoad() {
-      const { fullPath, query } = app.ms.$route;
-      console.log(fullPath, query); // '/pages/index/index' { id: 1 }
-   },
-   onClick() {
-      app.ms.push({
-         url: '/pages/logs/logs',
-         query: {
-            num: 0, // number
-            bool: true, // boolean
-         },
-         success: () => {
-      	   console.log('success');
-         },
-      });
-   },
+  onLoad() {
+  	const { fullPath, query } = app.ms.$route;
+    console.log(fullPath, query); // '/pages/index/index' { id: 1 }
+  },
+  onClick() {
+    app.ms.push({
+      url: '/pages/logs/logs',
+      query: {
+        num: 0, // number
+      	bool: true, // boolean
+      },
+      success: () => {
+      	console.log('success');
+      },
+    });
+  },
 });
 ```
 <a name="hmLwZ"></a>
@@ -58,9 +70,16 @@ Page({
 <a name="nIYxJ"></a>
 ## API 说明
 <a name="KWALC"></a>
-### getPage()
+### getPages()
 
-- 说明：获取当前页面信息，相当于使用 `getCurrentPages()` API 获取页面栈中最顶层的页面；
+- 说明：获取路由栈信息，相当于使用 `getCurrentPages()` API 获取页面栈；
+<a name="B9Nfr"></a>
+### getPage(delta)
+
+- 参数
+   - {number} [delta = 0] - 向前步进值
+- 说明：
+   - 获取页面信息，不传入参数时默认获取当前页面的信息，传入数值时将获取当前页面之前的页面信息（传入1为上一页面，以此类推）；
 <a name="icqz2"></a>
 ### push(options)
 
